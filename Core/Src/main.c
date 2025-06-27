@@ -327,13 +327,14 @@ static void MPU6050_Task(void *pvParameters) {
     vTaskDelayUntil(&lastWakeTime,xPeriod);
     mpu_data = MPU6050_ReadCalibratedData(); //这里的加速度和角速度为 m/s² * 100来进行积分计算
     imu_data = Quaternion_Update(mpu_data,dt);
-    QuaternionToEuler(imu_data,&roll,&pitch,&yaw);
+    ANODT_Send_Quaternion((int16_t) (imu_data.q0 * 10000), (int16_t) (-imu_data.q1 * 10000), (int16_t) (-imu_data.q2 * 10000), (int16_t) (-imu_data.q3 * 10000));
+    //QuaternionToEuler(imu_data,&roll,&pitch,&yaw);
 
-    roll = roll * 180.0f / M_PI;
-    pitch = pitch * 180.0f / M_PI;
-    yaw = yaw * 180.0f / M_PI;
+    //roll = roll * 180.0f / M_PI;
+    //pitch = pitch * 180.0f / M_PI;
+    //yaw = yaw * 180.0f / M_PI;
 
-    ANODT_Send((int16_t)(-roll*100),(int16_t)(pitch*100),(int16_t)(yaw*100));
+    //ANODT_Send_EULA((int16_t)(-roll*100),(int16_t)(pitch*100),(int16_t)(yaw*100));
 
     //OLED_NewFrame();
 

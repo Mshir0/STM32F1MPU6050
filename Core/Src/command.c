@@ -142,34 +142,69 @@ uint8_t Command_GetCommand(uint8_t *command) {
     }
 }
 
-uint8_t DataToSend[13];
+uint8_t DataToSend_EULA[13];
 
-void ANODT_Send(int16_t roll, int16_t pitch, int16_t yaw) {
+void ANODT_Send_EULA(int16_t roll, int16_t pitch, int16_t yaw) {
     uint8_t _cnt = 0;
 
-    DataToSend[_cnt++] = 0xaa;
-    DataToSend[_cnt++] = 0xff;
-    DataToSend[_cnt++] = 0x03;
-    DataToSend[_cnt++] = 7;
+    DataToSend_EULA[_cnt++] = 0xaa;
+    DataToSend_EULA[_cnt++] = 0xff;
+    DataToSend_EULA[_cnt++] = 0x03;
+    DataToSend_EULA[_cnt++] = 7;
 
-    DataToSend[_cnt++] = BYTE0(roll);
-    DataToSend[_cnt++] = BYTE1(roll);
+    DataToSend_EULA[_cnt++] = BYTE0(roll);
+    DataToSend_EULA[_cnt++] = BYTE1(roll);
 
-    DataToSend[_cnt++] = BYTE0(pitch);
-    DataToSend[_cnt++] = BYTE1(pitch);
+    DataToSend_EULA[_cnt++] = BYTE0(pitch);
+    DataToSend_EULA[_cnt++] = BYTE1(pitch);
 
-    DataToSend[_cnt++] = BYTE0(yaw);
-    DataToSend[_cnt++] = BYTE1(yaw);
+    DataToSend_EULA[_cnt++] = BYTE0(yaw);
+    DataToSend_EULA[_cnt++] = BYTE1(yaw);
 
-    DataToSend[_cnt++] = 0x00;
+    DataToSend_EULA[_cnt++] = 0x00;
 
     uint8_t sc = 0; //sum check
     uint8_t ac = 0; //add check
-    for (uint8_t i = 0; i < DataToSend[3]+4; i++) {
-        sc += DataToSend[i];
+    for (uint8_t i = 0; i < DataToSend_EULA[3]+4; i++) {
+        sc += DataToSend_EULA[i];
         ac += sc;
     }
-    DataToSend[_cnt++] = sc;
-    DataToSend[_cnt++] = ac;
-    HAL_UART_Transmit(&huart2, (uint8_t *)&DataToSend, sizeof(DataToSend), 100);
+    DataToSend_EULA[_cnt++] = sc;
+    DataToSend_EULA[_cnt++] = ac;
+    HAL_UART_Transmit(&huart2, (uint8_t *)&DataToSend_EULA, sizeof(DataToSend_EULA), 100);
+}
+
+uint8_t DataToSend_Quaternion[15];
+
+void ANODT_Send_Quaternion(int16_t q1, int16_t q2, int16_t q3, int16_t q4) {
+    uint8_t _cnt = 0;
+
+    DataToSend_Quaternion[_cnt++] = 0xaa;
+    DataToSend_Quaternion[_cnt++] = 0xff;
+    DataToSend_Quaternion[_cnt++] = 0x04;
+    DataToSend_Quaternion[_cnt++] = 9;
+
+    DataToSend_Quaternion[_cnt++] = BYTE0(q1);
+    DataToSend_Quaternion[_cnt++] = BYTE1(q1);
+
+    DataToSend_Quaternion[_cnt++] = BYTE0(q2);
+    DataToSend_Quaternion[_cnt++] = BYTE1(q2);
+
+    DataToSend_Quaternion[_cnt++] = BYTE0(q3);
+    DataToSend_Quaternion[_cnt++] = BYTE1(q3);
+
+    DataToSend_Quaternion[_cnt++] = BYTE0(q4);
+    DataToSend_Quaternion[_cnt++] = BYTE1(q4);
+
+    DataToSend_Quaternion[_cnt++] = 0x00;
+
+    uint8_t sc = 0; //sum check
+    uint8_t ac = 0; //add check
+    for (uint8_t i = 0; i < DataToSend_Quaternion[3]+4; i++) {
+        sc += DataToSend_Quaternion[i];
+        ac += sc;
+    }
+    DataToSend_Quaternion[_cnt++] = sc;
+    DataToSend_Quaternion[_cnt++] = ac;
+    HAL_UART_Transmit(&huart2, (uint8_t *)&DataToSend_Quaternion, sizeof(DataToSend_Quaternion), 100);
 }

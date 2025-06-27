@@ -26,7 +26,8 @@ uint8_t Command_GetCommand(uint8_t *command);
 
 
 
-void ANODT_Send(int16_t roll, int16_t pitch, int16_t yaw);
+void ANODT_Send_EULA(int16_t roll, int16_t pitch, int16_t yaw);
+void ANODT_Send_Quaternion(int16_t q1, int16_t q2, int16_t q3, int16_t q4);
 
 #endif //COMMAND_H
 
