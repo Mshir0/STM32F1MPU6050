@@ -28,10 +28,10 @@
 #include <stdio.h>
 
 #include "command.h"
-#include "kalman.h"
+#include "mpu_filter.h"
 #include "oled.h"
 #include "mpu6050.h"
-#include "kalman.h"
+#include "mpu_filter.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -326,7 +326,7 @@ static void MPU6050_Task(void *pvParameters) {
 
     vTaskDelayUntil(&lastWakeTime,xPeriod);
     mpu_data = MPU6050_ReadCalibratedData(); //这里的加速度和角速度为 m/s² * 100来进行积分计算
-    imu_data = Quaternion_Update(mpu_data,dt);
+    imu_data = Quaternion_Update(mpu_data,dt);//四元数为[q0,-q1,-q2,-q3]，因此计算完要加负号否则roll计算出来就是反的
     ANODT_Send_Quaternion((int16_t) (imu_data.q0 * 10000), (int16_t) (-imu_data.q1 * 10000), (int16_t) (-imu_data.q2 * 10000), (int16_t) (-imu_data.q3 * 10000));
     //QuaternionToEuler(imu_data,&roll,&pitch,&yaw);
 

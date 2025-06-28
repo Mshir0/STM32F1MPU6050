@@ -46,8 +46,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Core/Inc/pid.h
         Core/Src/mpu6050.c
         Core/Inc/mpu6050.h
-        Core/Inc/kalman.h
-        Core/Src/kalman.c)
+        Core/Inc/mpu_filter.h
+        Core/Src/mpu_filter.c)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
