@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 
+#include "task.h"
 #include "usart.h"
 
 int16_t Accel_X_RAW, Accel_Y_RAW, Accel_Z_RAW;
@@ -107,7 +108,7 @@ void MPU6050_Calibrate() {
         sum_gyro[1] += data.gy;
         sum_gyro[2] += data.gz;
 
-        HAL_Delay(10);
+        vTaskDelay(10);
     }
 
     calibration.accel_off[0] = sum_accel[0] / samples;
